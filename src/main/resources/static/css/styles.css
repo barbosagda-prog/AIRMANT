@@ -195,6 +195,58 @@ body {
     text-decoration: underline;
 }
 
+/* ===== Dashboard ===== */
+.dashboard-container {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+    max-width: 1100px;
+    width: 100%;
+    overflow: hidden;
+}
+
+.dashboard-header {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 25px 40px;
+    background: linear-gradient(135deg, #0a2540 0%, #1a3a5c 50%, #2c5282 100%);
+    color: #fff;
+}
+
+.logo-img-small {
+    width: 60px;
+    height: auto;
+    flex-shrink: 0;
+}
+
+.dashboard-header div {
+    flex: 1;
+}
+
+.dashboard-header h1 {
+    font-size: 22px;
+    letter-spacing: 0.5px;
+}
+
+.dashboard-header .subtitle {
+    color: #cbd5e0;
+    font-size: 13px;
+    margin-top: 4px;
+}
+
+.dashboard-header .btn-secondary {
+    flex-shrink: 0;
+    width: auto;
+}
+
+.dashboard-content {
+    padding: 40px;
+    color: #2d3748;
+    font-size: 15px;
+    line-height: 1.6;
+}
+
 /* Responsividad */
 @media (max-width: 768px) {
     .auth-container {
@@ -207,4 +259,5 @@ body {
     .presentation-img {
         max-width: 200px;
     }
+
 }
