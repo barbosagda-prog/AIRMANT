@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Sistema de acceso AIRMANT - Gestión Aeronáutica">
+    <title>AIRMANT - Login</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+<main class="auth-container">
+    <!-- Imagen de presentación (lado izquierdo) -->
+    <section class="presentation">
+        <img src="/img/presentacion.png" alt="Presentación AIRMANT" class="presentation-img">
+    </section>
+
+    <!-- Tarjeta de login (lado derecho) -->
+    <section class="card login-card">
+        <form id="formLogin" novalidate>
+            <div class="logo-header">
+                <img src="/img/airmant.png" alt="Logo AIRMANT" class="logo-img">
+                <h1>BIENVENIDO A AIRMANT</h1>
+                <p class="subtitle">Sistema de Gestión Aeronáutica</p>
+            </div>
+
+            <!-- Usuario -->
+            <div class="form-group">
+                <label for="usuario">Usuario</label>
+                <input type="text" id="usuario" name="usuario" placeholder="Ingrese su usuario" required>
+                <span class="error-msg" id="errorUsuario"></span>
+            </div>
+
+            <!-- Contraseña -->
+            <div class="form-group">
+                <label for="password">Contraseña</label>
+                <input type="password" id="password" name="password" placeholder="Ingrese su contraseña" required>
+                <span class="error-msg" id="errorPassword"></span>
+            </div>
+
+            <!-- Token -->
+            <div class="form-group">
+                <label for="token">Token</label>
+                <div class="token-wrapper">
+                    <input type="number" id="token" name="token" placeholder="Ingrese token">
+                    <button type="button" class="btn btn-secondary" id="btnValidarToken">Validar</button>
+                </div>
+                <span class="error-msg" id="errorToken"></span>
+            </div>
+
+            <!-- Huella -->
+            <div class="form-group huella-group">
+                <label for="btnHuella">Autenticación biométrica</label>
+                <button type="button" class="btn-huella" id="btnHuella" aria-label="Autenticar con huella">
+                    <span class="huella-icon">🖐️</span>
+                    <span>Usar huella digital</span>
+                </button>
+            </div>
+
+            <!-- Botón Ingresar (DENTRO del form) -->
+            <button type="submit" class="btn btn-primary">INGRESAR</button>
+
+            <div class="links">
+                <a href="#">¿Olvidaste tu contraseña?</a>
+            </div>
+        </form>
+    </section>
+</main>
+
+<script src="/js/main.js"></script>
+</body>
+</html>
