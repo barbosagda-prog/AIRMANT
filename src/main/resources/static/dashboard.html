@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AIRMANT - Dashboard</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+<main class="dashboard-container">
+    <header class="dashboard-header">
+        <img src="/img/airmant.png" alt="Logo AIRMANT" class="logo-img-small">
+        <div>
+            <h1>Bienvenido, <span id="nombreUsuario"></span></h1>
+            <p class="subtitle">Rol: <span id="rolUsuario"></span></p>
+        </div>
+        <button id="btnLogout" class="btn btn-secondary">Cerrar sesión</button>
+    </header>
+
+    <section class="dashboard-content">
+        <p>Sesión iniciada correctamente. Aquí irán los módulos del sistema
+            (Aeronaves, Mantenimientos, Manuales, Repuestos, Insumos) a medida
+            que se vayan construyendo.</p>
+    </section>
+</main>
+
+<script src="/js/dashboard.js"></script>
+</body>
+</html>
