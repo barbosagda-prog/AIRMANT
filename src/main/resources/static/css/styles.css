@@ -251,13 +251,114 @@ body {
 @media (max-width: 768px) {
     .auth-container {
         flex-direction: column;
-        max-width: 400px;
-    }
-    .presentation {
-        padding: 30px;
-    }
-    .presentation-img {
         max-width: 200px;
     }
 
+    .presentation {
+        padding: 30px;
+    }
+
+    .presentation-img {
+        max-width: 200px;
+    }
 }
+    /* ===== Modal ===== */
+    .modal-overlay {
+        position: fixed;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        background: rgba(10, 37, 64, 0.6);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 100;
+    }
+
+    .modal-card {
+        background: #fff;
+        border-radius: 16px;
+        padding: 30px;
+        max-width: 500px;
+        width: 90%;
+        max-height: 85vh;
+        overflow-y: auto;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+    }
+
+    .modal-card h2 {
+        color: #0a2540;
+        margin-bottom: 15px;
+    }
+    .menu-modulos {
+        display: flex;
+        gap: 15px;
+        flex-wrap: wrap;
+    }
+
+    .tarjeta-modulo {
+        text-decoration: none;
+        background: #edf2f7;
+        border-radius: 12px;
+        padding: 25px;
+        text-align: center;
+        width: 140px;
+        color: #2d3748;
+        transition: all 0.3s;
+    }
+
+    .tarjeta-modulo:hover {
+        background: #2c5282;
+        color: #fff;
+        transform: translateY(-4px);
+    }
+
+    .tarjeta-modulo span {
+        font-size: 32px;
+    }
+
+    .tarjeta-modulo p {
+        margin-top: 8px;
+        font-weight: 600;
+        font-size: 14px;
+    }
+    /* ===== Tabla ===== */
+    .tabla-aeronaves {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 14px;
+    }
+
+    .tabla-aeronaves th {
+        background: #0a2540;
+        color: #fff;
+        padding: 12px;
+        text-align: left;
+    }
+
+    .tabla-aeronaves td {
+        padding: 12px;
+        border-bottom: 1px solid #e2e8f0;
+    }
+
+    .tabla-aeronaves tr:hover {
+        background: #f7fafc;
+    }
+
+    .tabla-aeronaves button {
+        border: none;
+        border-radius: 6px;
+        padding: 6px 10px;
+        margin-right: 6px;
+        cursor: pointer;
+        font-size: 13px;
+    }
+
+    .btn-editar {
+        background: #2c5282;
+        color: #fff;
+    }
+
+    .btn-eliminar {
+        background: #e53e3e;
+        color: #fff;
+    }

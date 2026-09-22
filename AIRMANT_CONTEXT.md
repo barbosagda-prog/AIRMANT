@@ -123,7 +123,28 @@ Archivos modificados:
 
 ## 10. PRÓXIMO PASO
 
-Registrar aquí la próxima tarea que debe realizarse.
+plan planteado por claud
+
+1 Confirmar y limpiar el proyecto base
+Sube el proyecto como .zip para que pueda revisar la estructura real de carpetas frontend/backend/database. Verifica que exista el docker-compose.yml y que PostgreSQL levante correctamente en local antes de tocar código.
+2 Modelar la base de datos en Prisma
+Traduce la lista de entidades del documento (usuarios, roles, aeronaves, ordenes_mantenimiento, manuales_tecnicos, repuestos, insumos, inventario, auditoria) a un schema.prisma con snake_case en tablas/campos, tal como definiste en tus estándares. Corre la primera migración.
+3 Construir el módulo de autenticación real (backend)
+En NestJS crea el módulo auth con JWT: endpoints de login, registro y validación de token, más guards de roles/permisos. Este módulo reemplaza la lógica que falta detrás de tu login.html actual.
+4 Conectar el login del frontend al backend
+Reescribe el formLogin de tu HTML (o pásalo a un componente React Login.tsx) para que haga fetch/axios al endpoint /auth/login real, guarde el JWT y redirija al Dashboard según el rol del usuario.
+5 Construir módulos backend uno por uno
+Sigue el orden de dependencia: usuarios → aeronaves → mantenimientos → manuales → repuestos/insumos → inventario → reportes/auditoría. Cada módulo con su controller, service y DTOs, respetando camelCase/PascalCase de tus estándares.
+6 Construir las vistas React en paralelo
+Por cada módulo backend, crea su página en pages/ y sus componentes en components/<Módulo>/ (ya tienes la carpeta lista en tu estructura: Aeronaves, Mantenimientos, Manuales, Repuestos, Insumos). Consume la API mediante services/ con interfaces I+PascalCase.
+7 Integrar almacenamiento de archivos
+Configura MinIO local (o el bucket S3) para subir manuales técnicos y evidencias fotográficas; en la base de datos solo guarda ruta, nombre, versión y metadatos, como definiste en tu justificación.
+8 Pruebas, documentación y entrega de evidencia
+Prueba flujos completos (login → crear orden de mantenimiento → adjuntar manual), documenta en el README y prepara la evidencia siguiendo el formato SENA que ya usaste en GA6 y GA7.
+
+ya se realizo 
+fase 5: el módulo de Aeronaves, siguiendo el mismo patrón Model → Repository → Controller que ya usaste en Usuarios
+continuar con el paso indicado 
 
 ---
 
