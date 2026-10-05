@@ -362,3 +362,77 @@ body {
         background: #e53e3e;
         color: #fff;
     }
+
+/* ===== Detalle de orden ===== */
+.bloque-detalle {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.bloque-detalle h3 {
+    color: #0a2540;
+    margin-bottom: 15px;
+    font-size: 16px;
+}
+
+.lista-items {
+    list-style: none;
+}
+
+.lista-items li {
+    padding: 10px 12px;
+    border-bottom: 1px solid #edf2f7;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+}
+
+.lista-items li:last-child {
+    border-bottom: none;
+}
+
+.badge-pendiente {
+    background: #fed7aa;
+    color: #9c4221;
+    padding: 2px 8px;
+    border-radius: 6px;
+    font-size: 12px;
+}
+
+.badge-completada {
+    background: #c6f6d5;
+    color: #22543d;
+    padding: 2px 8px;
+    border-radius: 6px;
+    font-size: 12px;
+}
+
+#bloqueCierre textarea {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 14px;
+    resize: vertical;
+}
+
+/* ===== Insumos: alertas de vencimiento ===== */
+.fila-por-vencer {
+    background: #fff5f5 !important;
+    border-left: 4px solid #e53e3e;
+}
+
+.badge-vencer {
+    background: #e53e3e;
+    color: #fff;
+    padding: 2px 8px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    margin-left: 6px;
+}

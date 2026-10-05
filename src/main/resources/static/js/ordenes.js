@@ -88,7 +88,7 @@ form.addEventListener('submit', async (e) => {
         descripcionTrabajo: document.getElementById('descripcionTrabajo').value
     };
 
-    const res = await fetch(API_ORDENES, {
+    const res = await fetch(`${API_ORDENES}?idUsuario=${sessionStorage.getItem('idUsuario')}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(datos)

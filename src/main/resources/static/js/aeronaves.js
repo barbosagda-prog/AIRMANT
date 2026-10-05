@@ -66,7 +66,7 @@ form.addEventListener('submit', async (e) => {
         proximaInspeccion: document.getElementById('proximaInspeccion').value || null
     };
 
-    const url = id ? `${API}/${id}` : API;
+    const url = id ? `${API}/${id}?idUsuario=${sessionStorage.getItem('idUsuario')}` : `${API}?idUsuario=${sessionStorage.getItem('idUsuario')}`;
     const metodo = id ? 'PUT' : 'POST';
 
     await fetch(url, {
@@ -91,7 +91,7 @@ cuerpoTabla.addEventListener('click', async (e) => {
 
     if (e.target.classList.contains('btn-eliminar')) {
         if (confirm('¿Eliminar esta aeronave?')) {
-            await fetch(`${API}/${id}`, { method: 'DELETE' });
+            await fetch(`${API}/${id}?idUsuario=${sessionStorage.getItem('idUsuario')}`, { method: 'DELETE' });
             cargarAeronaves();
         }
     }

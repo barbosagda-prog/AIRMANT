@@ -31,7 +31,8 @@ public class AuthController {
         return ResponseEntity.ok(Map.of(
                 "token", "sesion-" + usuario.getId_usuarios(),
                 "rol", usuario.getRol(),
-                "nombre", usuario.getNombres()
+                "nombre", usuario.getNombres(),
+                "id", usuario.getId_usuarios()
         ));
     }
 }

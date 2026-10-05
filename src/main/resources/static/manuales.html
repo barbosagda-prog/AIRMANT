@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AIRMANT - Manuales Técnicos</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+<main class="dashboard-container" style="max-width:1200px;">
+    <header class="dashboard-header">
+        <img src="/img/airmant.png" alt="Logo AIRMANT" class="logo-img-small">
+        <div>
+            <h1>Manuales Técnicos</h1>
+            <p class="subtitle">Catálogo y trazabilidad de documentación técnica</p>
+        </div>
+        <a href="/dashboard.html" class="btn btn-secondary">Volver</a>
+    </header>
+
+    <section class="dashboard-content">
+        <button id="btnNuevoManual" class="btn btn-primary" style="width:auto; margin-bottom:20px;">
+            + Nuevo manual
+        </button>
+
+        <table class="tabla-aeronaves" id="tablaManuales">
+            <thead>
+            <tr>
+                <th>Tipo</th>
+                <th>Fabricante</th>
+                <th>Modelo</th>
+                <th>N° ATA</th>
+                <th>N° Documento</th>
+                <th>Registrado por</th>
+                <th>Fecha registro</th>
+                <th>Acciones</th>
+            </tr>
+            </thead>
+            <tbody id="cuerpoTablaManuales"></tbody>
+        </table>
+    </section>
+</main>
+
+<!-- Modal nuevo manual -->
+<div id="modalManual" class="modal-overlay" style="display:none;">
+    <div class="modal-card">
+        <h2>Nuevo manual técnico</h2>
+        <form id="formManual">
+            <div class="form-group">
+                <label>Tipo de manual</label>
+                <select id="tipoManual" required>
+                    <option value="AMM">AMM</option>
+                    <option value="CMM">CMM</option>
+                    <option value="SRM">SRM</option>
+                    <option value="IPC">IPC</option>
+                    <option value="AD">AD</option>
+                    <option value="SB">SB</option>
+                    <option value="Otro">Otro</option>
+                </select>
+            </div>
+            <div class="form-group"><label>Fabricante</label><input type="text" id="fabricante" required></div>
+            <div class="form-group"><label>Modelo</label><input type="text" id="modelo" required></div>
+            <div class="form-group"><label>N° ATA</label><input type="text" id="numeroAta"></div>
+            <div class="form-group"><label>Idioma</label><input type="text" id="idioma" required></div>
+            <div class="form-group"><label>N° de documento</label><input type="text" id="numeroDocumento" required></div>
+            <div class="form-group"><label>Fuente</label><input type="text" id="fuente"></div>
+            <div class="form-group">
+                <label>Registrado por</label>
+                <select id="selectRegistrador" required></select>
+            </div>
+
+            <div style="display:flex; gap:10px; margin-top:15px;">
+                <button type="submit" class="btn btn-primary">Guardar</button>
+                <button type="button" id="btnCancelarManual" class="btn btn-secondary">Cancelar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal historial -->
+<div id="modalHistorial" class="modal-overlay" style="display:none;">
+    <div class="modal-card">
+        <h2>Historial del manual</h2>
+        <ul id="listaHistorial" class="lista-items"></ul>
+        <button type="button" id="btnCerrarHistorial" class="btn btn-secondary" style="margin-top:15px;">Cerrar</button>
+    </div>
+</div>
+
+<script src="/js/manuales.js"></script>
+</body>
+</html>

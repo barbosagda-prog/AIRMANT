@@ -17,7 +17,7 @@ document.getElementById('formLogin').addEventListener('submit', async (e) => {
             sessionStorage.setItem('rol', data.rol);
             window.location.href = '/dashboard.html';
             sessionStorage.setItem('nombre', data.nombre);
-
+            sessionStorage.setItem('idUsuario', data.id);
         } else {
             document.getElementById('errorUsuario').textContent = 'Usuario o contraseña incorrectos';
         }

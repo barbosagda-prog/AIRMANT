@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AIRMANT - Detalle de Orden</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+<main class="dashboard-container" style="max-width:1300px;">
+    <header class="dashboard-header">
+        <img src="/img/airmant.png" alt="Logo AIRMANT" class="logo-img-small">
+        <div>
+            <h1 id="tituloOrden">Orden de Mantenimiento</h1>
+            <p class="subtitle" id="estadoOrden"></p>
+        </div>
+        <a href="/ordenes.html" class="btn btn-secondary">Volver</a>
+    </header>
+
+    <section class="dashboard-content">
+        <!-- Resumen de la orden -->
+        <div id="resumenOrden" style="background:#edf2f7; padding:20px; border-radius:12px; margin-bottom:25px;"></div>
+
+        <!-- Tareas -->
+        <div class="bloque-detalle">
+            <h3>Tareas de mantenimiento</h3>
+            <div style="display:flex; gap:10px; margin-bottom:12px;">
+                <input type="text" id="nuevaTarea" placeholder="Descripción de la tarea" style="flex:1; padding:10px; border:2px solid #e2e8f0; border-radius:8px;">
+                <button id="btnAgregarTarea" class="btn btn-primary" style="width:auto;">Agregar</button>
+            </div>
+            <ul id="listaTareas" class="lista-items"></ul>
+        </div>
+
+        <!-- Documentación técnica -->
+        <div class="bloque-detalle">
+            <h3>Documentación técnica</h3>
+            <div style="display:flex; gap:10px; margin-bottom:12px; flex-wrap:wrap;">
+                <select id="tipoDocumento" style="padding:10px; border:2px solid #e2e8f0; border-radius:8px;">
+                    <option value="AMM">AMM</option>
+                    <option value="CMM">CMM</option>
+                    <option value="SRM">SRM</option>
+                    <option value="IPC">IPC</option>
+                    <option value="AD">AD</option>
+                    <option value="SB">SB</option>
+                    <option value="Otro">Otro</option>
+                </select>
+                <input type="text" id="codigoReferencia" placeholder="Código/referencia" style="padding:10px; border:2px solid #e2e8f0; border-radius:8px;">
+                <input type="text" id="numeroRevision" placeholder="N° revisión" style="padding:10px; border:2px solid #e2e8f0; border-radius:8px; width:120px;">
+                <input type="text" id="capituloSeccion" placeholder="Capítulo/sección" style="padding:10px; border:2px solid #e2e8f0; border-radius:8px;">
+                <button id="btnAgregarDocumento" class="btn btn-primary" style="width:auto;">Agregar</button>
+            </div>
+            <ul id="listaDocumentos" class="lista-items"></ul>
+        </div>
+
+        <!-- Repuestos -->
+        <div class="bloque-detalle">
+            <h3>Repuestos utilizados</h3>
+            <div style="display:flex; gap:10px; margin-bottom:12px; flex-wrap:wrap;">
+                <select id="selectRepuesto" style="flex:1; padding:10px; border:2px solid #e2e8f0; border-radius:8px;"></select>
+                <input type="number" id="cantidadRepuesto" placeholder="Cantidad" style="width:100px; padding:10px; border:2px solid #e2e8f0; border-radius:8px;">
+                <input type="text" id="numeroSerieRepuesto" placeholder="N° serie (opcional)" style="padding:10px; border:2px solid #e2e8f0; border-radius:8px;">
+                <button id="btnAgregarRepuesto" class="btn btn-primary" style="width:auto;">Agregar</button>
+            </div>
+            <ul id="listaRepuestos" class="lista-items"></ul>
+        </div>
+
+        <!-- Herramientas -->
+        <div class="bloque-detalle">
+            <h3>Herramientas utilizadas</h3>
+            <div style="display:flex; gap:10px; margin-bottom:12px;">
+                <select id="selectHerramienta" style="flex:1; padding:10px; border:2px solid #e2e8f0; border-radius:8px;"></select>
+                <button id="btnAgregarHerramienta" class="btn btn-primary" style="width:auto;">Agregar</button>
+            </div>
+            <ul id="listaHerramientas" class="lista-items"></ul>
+        </div>
+
+        <!-- Cierre -->
+        <div class="bloque-detalle" id="bloqueCierre">
+            <h3>Cierre de la orden</h3>
+            <div class="form-group"><label>Trabajo realizado</label><textarea id="trabajoRealizado" rows="3"></textarea></div>
+            <div class="form-group"><label>Resultado</label><input type="text" id="resultado"></div>
+            <div class="form-group"><label>Observaciones finales</label><textarea id="observacionesFinales" rows="2"></textarea></div>
+            <div class="form-group">
+                <label>Inspector (opcional)</label>
+                <select id="selectInspector"></select>
+            </div>
+            <button id="btnCerrarOrden" class="btn btn-primary" style="width:auto; background:#2d9d3b;">Finalizar orden</button>
+        </div>
+    </section>
+</main>
+
+<script src="/js/orden-detalle.js"></script>
+</body>
+</html>
