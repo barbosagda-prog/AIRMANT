@@ -2,10 +2,8 @@ package com.AIRMANT20.airmant.controller;
 
 import com.AIRMANT20.airmant.model.HistorialInsumo;
 import com.AIRMANT20.airmant.model.Insumos;
-import com.AIRMANT20.airmant.model.Usuarios;
-import com.AIRMANT20.airmant.repository.HistorialInsumoRepository;
-import com.AIRMANT20.airmant.repository.InsumosRepository;
-import com.AIRMANT20.airmant.repository.UsuariosRepository;
+import com.AIRMANT20.airmant.service.InsumosService;
+import com.AIRMANT20.airmant.service.ResultadoOperacion;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,113 +14,74 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/insumos")
 public class InsumosController {
 
-    @Autowired private InsumosRepository insumosRepository;
-    @Autowired private HistorialInsumoRepository historialRepository;
-    @Autowired private UsuariosRepository usuariosRepository;
+    @Autowired
+    private InsumosService insumosService;
 
     @GetMapping
     public List<Insumos> listar() {
-        return insumosRepository.findAll();
+        return insumosService.listar();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Insumos> obtenerPorId(@PathVariable Long id) {
-        return insumosRepository.findById(id)
+        return insumosService.obtenerPorId(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @GetMapping("/{id}/historial")
     public List<HistorialInsumo> historialDeInsumo(@PathVariable Long id) {
-        return historialRepository.findByIdInsumoOrderByFechaDesc(id);
+        return insumosService.historialDeInsumo(id);
     }
 
     @GetMapping("/historial")
     public List<HistorialInsumo> historialGeneral() {
-        return historialRepository.findAllByOrderByFechaDesc();
+        return insumosService.historialGeneral();
     }
 
     @GetMapping("/proximos-vencer")
     public List<Insumos> proximosAVencer(@RequestParam(defaultValue = "30") int dias) {
-        LocalDate limite = LocalDate.now().plusDays(dias);
-        return insumosRepository.findAll().stream()
-                .filter(i -> i.getFechaVencimiento() != null && !i.getFechaVencimiento().isAfter(limite))
-                .collect(Collectors.toList());
-    }
-
-    private void registrarHistorial(Long idInsumo, String codigo, Usuarios usuario, String accion, String detalle) {
-        HistorialInsumo entrada = new HistorialInsumo();
-        entrada.setIdInsumo(idInsumo);
-        entrada.setCodigoInsumo(codigo);
-        entrada.setUsuario(usuario);
-        entrada.setAccion(accion);
-        entrada.setFecha(LocalDateTime.now());
-        entrada.setDetalle(detalle);
-        historialRepository.save(entrada);
+        return insumosService.proximosAVencer(dias);
     }
 
     @PostMapping
     public ResponseEntity<?> crear(@RequestParam Long idUsuario, @RequestBody Insumos insumo) {
-        Optional<Usuarios> usuario = usuariosRepository.findById(idUsuario);
-        if (usuario.isEmpty()) return ResponseEntity.badRequest().body("Usuario no encontrado");
-
-        Insumos guardado = insumosRepository.save(insumo);
-        registrarHistorial(guardado.getIdInsumo(), guardado.getCodigo(), usuario.get(), "Creado", "Insumo registrado en el catálogo");
-
-        return ResponseEntity.ok(guardado);
+        ResultadoOperacion<Insumos> resultado = insumosService.crear(idUsuario, insumo);
+        if (resultado.getTipo() == ResultadoOperacion.Tipo.ERROR_VALIDACION) {
+            return ResponseEntity.badRequest().body(resultado.getMensajeError());
+        }
+        return ResponseEntity.ok(resultado.getDatos());
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<?> actualizar(@PathVariable Long id, @RequestParam Long idUsuario, @RequestBody Insumos datosNuevos) {
-        Optional<Usuarios> usuario = usuariosRepository.findById(idUsuario);
-        if (usuario.isEmpty()) return ResponseEntity.badRequest().body("Usuario no encontrado");
-
-        return insumosRepository.findById(id)
-                .map(insumoExistente -> {
-                    insumoExistente.setCodigo(datosNuevos.getCodigo());
-                    insumoExistente.setDescripcion(datosNuevos.getDescripcion());
-                    insumoExistente.setCategoria(datosNuevos.getCategoria());
-                    insumoExistente.setCantidadStock(datosNuevos.getCantidadStock());
-                    insumoExistente.setUnidadMedida(datosNuevos.getUnidadMedida());
-                    insumoExistente.setProveedor(datosNuevos.getProveedor());
-                    insumoExistente.setEstado(datosNuevos.getEstado());
-                    insumoExistente.setFechaVencimiento(datosNuevos.getFechaVencimiento());
-                    Insumos actualizado = insumosRepository.save(insumoExistente);
-
-                    registrarHistorial(actualizado.getIdInsumo(), actualizado.getCodigo(), usuario.get(), "Modificado", "Datos del insumo actualizados");
-
-                    return ResponseEntity.ok(actualizado);
-                })
-                .orElse(ResponseEntity.notFound().build());
+        ResultadoOperacion<Insumos> resultado = insumosService.actualizar(id, idUsuario, datosNuevos);
+        return switch (resultado.getTipo()) {
+            case EXITO -> ResponseEntity.ok(resultado.getDatos());
+            case NO_ENCONTRADO -> ResponseEntity.notFound().build();
+            case ERROR_VALIDACION -> ResponseEntity.badRequest().body(resultado.getMensajeError());
+        };
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> eliminar(@PathVariable Long id, @RequestParam Long idUsuario) {
-        Optional<Usuarios> usuario = usuariosRepository.findById(idUsuario);
-        if (usuario.isEmpty()) return ResponseEntity.badRequest().body("Usuario no encontrado");
-
-        Optional<Insumos> insumo = insumosRepository.findById(id);
-        if (insumo.isEmpty()) return ResponseEntity.notFound().build();
-
-        registrarHistorial(id, insumo.get().getCodigo(), usuario.get(), "Eliminado", "Insumo eliminado del catálogo");
-        insumosRepository.deleteById(id);
-
-        return ResponseEntity.noContent().build();
+        ResultadoOperacion<Void> resultado = insumosService.eliminar(id, idUsuario);
+        return switch (resultado.getTipo()) {
+            case EXITO -> ResponseEntity.noContent().build();
+            case NO_ENCONTRADO -> ResponseEntity.notFound().build();
+            case ERROR_VALIDACION -> ResponseEntity.badRequest().body(resultado.getMensajeError());
+        };
     }
 
     @GetMapping("/exportar-excel")
     public ResponseEntity<byte[]> exportarProximosAVencer(@RequestParam(defaultValue = "30") int dias) throws IOException {
-        List<Insumos> proximos = proximosAVencer(dias);
+        List<Insumos> proximos = insumosService.proximosAVencer(dias);
 
         Workbook workbook = new XSSFWorkbook();
         Sheet sheet = workbook.createSheet("Insumos por vencer");

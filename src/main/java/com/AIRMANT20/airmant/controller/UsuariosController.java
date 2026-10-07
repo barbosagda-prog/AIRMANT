@@ -1,54 +1,34 @@
 package com.AIRMANT20.airmant.controller;
 
 import com.AIRMANT20.airmant.model.Usuarios;
-import com.AIRMANT20.airmant.repository.UsuariosRepository;
-import org.jspecify.annotations.NonNull;
+import com.AIRMANT20.airmant.service.UsuariosService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/usuarios")
-public class UsuariosController
-{
-    @Autowired
-    private UsuariosRepository usuariosRepository;
+public class UsuariosController {
 
     @Autowired
-    private PasswordEncoder passwordEncoder;
+    private UsuariosService usuariosService;
 
     @GetMapping
-    public List<Usuarios> getAll()
-    {
-        return usuariosRepository.findAll();
+    public List<Usuarios> listar() {
+        return usuariosService.listar();
     }
 
     @GetMapping("/{id}")
-    public Usuarios getById(@PathVariable Long id)
-    {
-        return usuariosRepository.findById(id).orElse(null );
+    public ResponseEntity<Usuarios> obtenerPorId(@PathVariable Long id) {
+        return usuariosService.obtenerPorId(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public Usuarios create(@RequestBody Usuarios usuarios)
-    {
-        usuarios.setPassword(passwordEncoder.encode(usuarios.getPassword()));
-        return usuariosRepository.save(usuarios);
-    }
-
-    @PutMapping("/{id}")
-    public Usuarios Update(@PathVariable Long id, @RequestBody @NonNull Usuarios usuarios)
-    {
-        usuarios.setId_usuarios(id);
-        usuarios.setPassword(passwordEncoder.encode(usuarios.getPassword()));
-        return usuariosRepository.save(usuarios);
-    }
-
-    @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id)
-    {
-        usuariosRepository.deleteById(id);
+    public Usuarios crear(@RequestBody Usuarios usuario) {
+        return usuariosService.crear(usuario);
     }
 }

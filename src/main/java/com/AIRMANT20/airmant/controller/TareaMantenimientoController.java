@@ -1,54 +1,50 @@
 package com.AIRMANT20.airmant.controller;
 
-import com.AIRMANT20.airmant.model.OrdenMantenimiento;
 import com.AIRMANT20.airmant.model.TareaMantenimiento;
-import com.AIRMANT20.airmant.repository.OrdenMantenimientoRepository;
-import com.AIRMANT20.airmant.repository.TareaMantenimientoRepository;
+import com.AIRMANT20.airmant.service.ResultadoOperacion;
+import com.AIRMANT20.airmant.service.TareaMantenimientoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/ordenes/{idOrden}/tareas")
 public class TareaMantenimientoController {
 
-    @Autowired private TareaMantenimientoRepository tareaRepository;
-    @Autowired private OrdenMantenimientoRepository ordenRepository;
+    @Autowired
+    private TareaMantenimientoService tareaService;
 
     @GetMapping
     public List<TareaMantenimiento> listar(@PathVariable Long idOrden) {
-        return tareaRepository.findByOrden_IdOrden(idOrden);
+        return tareaService.listar(idOrden);
     }
 
     @PostMapping
     public ResponseEntity<?> registrar(@PathVariable Long idOrden, @RequestBody TareaMantenimiento tarea) {
-        Optional<OrdenMantenimiento> orden = ordenRepository.findById(idOrden);
-        if (orden.isEmpty()) return ResponseEntity.badRequest().body("Orden no encontrada");
-
-        tarea.setOrden(orden.get());
-        if (tarea.getEstado() == null) tarea.setEstado("Pendiente");
-        return ResponseEntity.ok(tareaRepository.save(tarea));
+        ResultadoOperacion<TareaMantenimiento> resultado = tareaService.registrar(idOrden, tarea);
+        if (resultado.getTipo() == ResultadoOperacion.Tipo.ERROR_VALIDACION) {
+            return ResponseEntity.badRequest().body(resultado.getMensajeError());
+        }
+        return ResponseEntity.ok(resultado.getDatos());
     }
 
     @PutMapping("/{idTarea}/completar")
     public ResponseEntity<?> completar(@PathVariable Long idOrden, @PathVariable Long idTarea) {
-        return tareaRepository.findById(idTarea)
-                .map(tarea -> {
-                    tarea.setEstado("Completada");
-                    return ResponseEntity.ok(tareaRepository.save(tarea));
-                })
-                .orElse(ResponseEntity.notFound().build());
+        ResultadoOperacion<TareaMantenimiento> resultado = tareaService.completar(idTarea);
+        return switch (resultado.getTipo()) {
+            case EXITO -> ResponseEntity.ok(resultado.getDatos());
+            case NO_ENCONTRADO -> ResponseEntity.notFound().build();
+            case ERROR_VALIDACION -> ResponseEntity.badRequest().body(resultado.getMensajeError());
+        };
     }
 
     @DeleteMapping("/{idTarea}")
     public ResponseEntity<Void> eliminar(@PathVariable Long idOrden, @PathVariable Long idTarea) {
-        if (!tareaRepository.existsById(idTarea)) {
-            return ResponseEntity.notFound().build();
-        }
-        tareaRepository.deleteById(idTarea);
-        return ResponseEntity.noContent().build();
+        ResultadoOperacion<Void> resultado = tareaService.eliminar(idTarea);
+        return resultado.getTipo() == ResultadoOperacion.Tipo.EXITO
+                ? ResponseEntity.noContent().build()
+                : ResponseEntity.notFound().build();
     }
 }
