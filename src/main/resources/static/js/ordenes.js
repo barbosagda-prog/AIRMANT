@@ -17,7 +17,7 @@ async function cargarOrdenes() {
     if (matricula) url = `${API_ORDENES}/buscar?matricula=${matricula}`;
     else if (estado) url = `${API_ORDENES}/buscar?estado=${estado}`;
 
-    const res = await fetch(url);
+    const res = await apiFetch(url);
     const lista = await res.json();
     cuerpoTabla.innerHTML = '';
     lista.forEach(o => {
@@ -37,16 +37,16 @@ async function cargarOrdenes() {
 }
 
 async function cargarSelects() {
-    const resAeronaves = await fetch('/api/aeronaves');
+    const resAeronaves = await apiFetch('/api/aeronaves');
     const aeronaves = await resAeronaves.json();
     selectAeronave.innerHTML = '<option value="">Selecciona una aeronave</option>';
     aeronaves.forEach(a => {
         selectAeronave.innerHTML += `<option value="${a.idAeronave}" data-info='${JSON.stringify(a)}'>${a.matricula} - ${a.modeloFabricacion}</option>`;
     });
 
-    const resUsuarios = await fetch('/api/usuarios');
+    const resUsuarios = await apiFetch('/api/usuarios');
     const usuarios = await resUsuarios.json();
-    const tecnicos = usuarios.filter(u => (u.rol || '').toUpperCase() === 'TECNICO');
+    const tecnicos = usuarios.filter(u => (u.rol || '').toUpperCase() === 'TECNICO_MANTENIMIENTO');
     selectTecnico.innerHTML = '<option value="">Selecciona un técnico</option>';
     tecnicos.forEach(t => {
         selectTecnico.innerHTML += `<option value="${t.id_usuarios}">${t.nombres} ${t.apellidos}</option>`;
@@ -88,7 +88,7 @@ form.addEventListener('submit', async (e) => {
         descripcionTrabajo: document.getElementById('descripcionTrabajo').value
     };
 
-    const res = await fetch(`${API_ORDENES}?idUsuario=${sessionStorage.getItem('idUsuario')}`, {
+    const res = await apiFetch(`${API_ORDENES}?idUsuario=${sessionStorage.getItem('idUsuario')}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(datos)

@@ -15,7 +15,7 @@ function diasRestantes(fecha) {
 }
 
 async function cargarInsumos() {
-    const res = await fetch(API);
+    const res = await apiFetch(API);
     const lista = await res.json();
     cuerpoTabla.innerHTML = '';
     let alertas = 0;
@@ -88,7 +88,7 @@ form.addEventListener('submit', async (e) => {
     const url = id ? `${API}/${id}?idUsuario=${sessionStorage.getItem('idUsuario')}` : `${API}?idUsuario=${sessionStorage.getItem('idUsuario')}`;
     const metodo = id ? 'PUT' : 'POST';
 
-    await fetch(url, {
+    await apiFetch(url, {
         method: metodo,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(datos)
@@ -103,17 +103,31 @@ cuerpoTabla.addEventListener('click', async (e) => {
     if (!id) return;
 
     if (e.target.classList.contains('btn-editar')) {
-        const res = await fetch(`${API}/${id}`);
+        const res = await apiFetch(`${API}/${id}`);
         const insumo = await res.json();
         abrirModal(insumo);
     }
 
     if (e.target.classList.contains('btn-eliminar')) {
         if (confirm('¿Eliminar este insumo?')) {
-            await fetch(`${API}/${id}?idUsuario=${sessionStorage.getItem('idUsuario')}`, { method: 'DELETE' });
+            await apiFetch(`${API}/${id}?idUsuario=${sessionStorage.getItem('idUsuario')}`, { method: 'DELETE' });
             cargarInsumos();
         }
     }
+});
+document.getElementById('btnExportar').addEventListener('click', async () => {
+    const res = await apiFetch('/api/insumos/exportar-excel?dias=30');
+    if (!res.ok) {
+        alert('No se pudo generar el Excel');
+        return;
+    }
+    const blob = await res.blob();
+    const url = URL.createObjectURL(blob);
+    const enlace = document.createElement('a');
+    enlace.href = url;
+    enlace.download = 'insumos_proximos_vencer.xlsx';
+    enlace.click();
+    URL.revokeObjectURL(url);
 });
 
 cargarInsumos();

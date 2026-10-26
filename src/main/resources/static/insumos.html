@@ -22,7 +22,7 @@
             <button id="btnNuevoInsumo" class="btn btn-primary" style="width:auto;">+ Nuevo insumo</button>
             <div style="display:flex; gap:10px; align-items:center;">
                 <span id="contadorAlertas" class="badge-vencer" style="display:none;"></span>
-                <a id="btnExportar" href="/api/insumos/exportar-excel?dias=30" class="btn btn-secondary" style="width:auto;">📥 Exportar próximos a vencer</a>
+                <button id="btnExportar" class="btn btn-secondary" style="width:auto;">📥 Exportar próximos a vencer</button>
             </div>
         </div>
 
@@ -68,6 +68,7 @@
     </div>
 </div>
 
+<script src="/js/api.js"></script>
 <script src="/js/insumos.js"></script>
 </body>
 </html>

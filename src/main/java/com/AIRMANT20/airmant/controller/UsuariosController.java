@@ -1,6 +1,7 @@
 package com.AIRMANT20.airmant.controller;
 
 import com.AIRMANT20.airmant.model.Usuarios;
+import com.AIRMANT20.airmant.service.ResultadoOperacion;
 import com.AIRMANT20.airmant.service.UsuariosService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +29,11 @@ public class UsuariosController {
     }
 
     @PostMapping
-    public Usuarios crear(@RequestBody Usuarios usuario) {
-        return usuariosService.crear(usuario);
+    public ResponseEntity<?> crear(@RequestBody Usuarios usuario) {
+        ResultadoOperacion<Usuarios> resultado = usuariosService.crear(usuario);
+        if (resultado.getTipo() == ResultadoOperacion.Tipo.ERROR_VALIDACION) {
+            return ResponseEntity.badRequest().body(resultado.getMensajeError());
+        }
+        return ResponseEntity.ok(resultado.getDatos());
     }
 }

@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
 @Table(name= "usuarios")
@@ -37,6 +38,7 @@ public class Usuarios {
     private String email;
 
     @NotBlank (message = "Ingrese una contraseña")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
     @NotNull (message = "Ingrese numero correcto")

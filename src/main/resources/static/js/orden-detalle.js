@@ -8,7 +8,7 @@ if (!idOrden) window.location.href = '/ordenes.html';
 const API = `/api/ordenes/${idOrden}`;
 
 async function cargarOrden() {
-    const res = await fetch(API);
+    const res = await apiFetch(API);
     if (!res.ok) { alert('Orden no encontrada'); window.location.href = '/ordenes.html'; return; }
     const o = await res.json();
 
@@ -28,7 +28,7 @@ async function cargarOrden() {
 }
 
 async function cargarTareas() {
-    const res = await fetch(`${API}/tareas`);
+    const res = await apiFetch(`${API}/tareas`);
     const tareas = await res.json();
     const lista = document.getElementById('listaTareas');
     lista.innerHTML = '';
@@ -49,7 +49,7 @@ async function cargarTareas() {
 document.getElementById('btnAgregarTarea').addEventListener('click', async () => {
     const descripcion = document.getElementById('nuevaTarea').value;
     if (!descripcion) return;
-    await fetch(`${API}/tareas`, {
+    await apiFetch(`${API}/tareas`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ descripcion })
@@ -61,13 +61,13 @@ document.getElementById('btnAgregarTarea').addEventListener('click', async () =>
 document.getElementById('listaTareas').addEventListener('click', async (e) => {
     if (e.target.classList.contains('btn-completar-tarea')) {
         const idTarea = e.target.dataset.id;
-        await fetch(`${API}/tareas/${idTarea}/completar`, { method: 'PUT' });
+        await apiFetch(`${API}/tareas/${idTarea}/completar`, { method: 'PUT' });
         cargarTareas();
     }
 });
 
 async function cargarDocumentos() {
-    const res = await fetch(`${API}/documentos`);
+    const res = await apiFetch(`${API}/documentos`);
     const documentos = await res.json();
     const lista = document.getElementById('listaDocumentos');
     lista.innerHTML = '';
@@ -86,7 +86,7 @@ document.getElementById('btnAgregarDocumento').addEventListener('click', async (
         capituloSeccion: document.getElementById('capituloSeccion').value
     };
     if (!datos.codigoReferencia) return;
-    await fetch(`${API}/documentos`, {
+    await apiFetch(`${API}/documentos`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(datos)
@@ -98,7 +98,7 @@ document.getElementById('btnAgregarDocumento').addEventListener('click', async (
 });
 
 async function cargarSelectRepuestos() {
-    const res = await fetch('/api/repuestos');
+    const res = await apiFetch('/api/repuestos');
     const repuestos = await res.json();
     const select = document.getElementById('selectRepuesto');
     select.innerHTML = '';
@@ -108,7 +108,7 @@ async function cargarSelectRepuestos() {
 }
 
 async function cargarRepuestosUsados() {
-    const res = await fetch(`${API}/repuestos`);
+    const res = await apiFetch(`${API}/repuestos`);
     const usados = await res.json();
     const lista = document.getElementById('listaRepuestos');
     lista.innerHTML = '';
@@ -125,7 +125,7 @@ document.getElementById('btnAgregarRepuesto').addEventListener('click', async ()
     const numeroSerie = document.getElementById('numeroSerieRepuesto').value;
     if (!idRepuesto || !cantidadUtilizada) return;
 
-    const res = await fetch(`${API}/cerrar?idUsuario=${sessionStorage.getItem('idUsuario')}`, {
+    const res = await apiFetch(`${API}/cerrar?idUsuario=${sessionStorage.getItem('idUsuario')}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(datos)
@@ -143,7 +143,7 @@ document.getElementById('btnAgregarRepuesto').addEventListener('click', async ()
 });
 
 async function cargarSelectHerramientas() {
-    const res = await fetch('/api/herramientas');
+    const res = await apiFetch('/api/herramientas');
     const herramientas = await res.json();
     const select = document.getElementById('selectHerramienta');
     select.innerHTML = '';
@@ -153,7 +153,7 @@ async function cargarSelectHerramientas() {
 }
 
 async function cargarHerramientasUsadas() {
-    const res = await fetch(`${API}/herramientas`);
+    const res = await apiFetch(`${API}/herramientas`);
     const usadas = await res.json();
     const lista = document.getElementById('listaHerramientas');
     lista.innerHTML = '';
@@ -168,7 +168,7 @@ document.getElementById('btnAgregarHerramienta').addEventListener('click', async
     const idHerramienta = document.getElementById('selectHerramienta').value;
     if (!idHerramienta) return;
 
-    const res = await fetch(`${API}/herramientas`, {
+    const res = await apiFetch(`${API}/herramientas`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ idHerramienta })
@@ -183,7 +183,7 @@ document.getElementById('btnAgregarHerramienta').addEventListener('click', async
 });
 
 async function cargarSelectInspector() {
-    const res = await fetch('/api/usuarios');
+    const res = await apiFetch('/api/usuarios');
     const usuarios = await res.json();
     const select = document.getElementById('selectInspector');
     select.innerHTML = '<option value="">Sin inspector</option>';
@@ -202,7 +202,7 @@ document.getElementById('btnCerrarOrden').addEventListener('click', async () => 
         idInspector: document.getElementById('selectInspector').value || null
     };
 
-    const res = await fetch(`${API}/cerrar`, {
+    const res = await apiFetch(`${API}/cerrar?idUsuario=${sessionStorage.getItem('idUsuario')}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(datos)
@@ -212,7 +212,8 @@ document.getElementById('btnCerrarOrden').addEventListener('click', async () => 
         alert('Orden finalizada correctamente');
         cargarOrden();
     } else {
-        alert('Error al finalizar la orden');
+        const error = await res.text();
+        alert('Error al finalizar la orden: ' + (error || 'código ' + res.status));
     }
 });
 

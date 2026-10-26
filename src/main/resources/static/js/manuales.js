@@ -9,7 +9,7 @@ const form = document.getElementById('formManual');
 const selectRegistrador = document.getElementById('selectRegistrador');
 
 async function cargarManuales() {
-    const res = await fetch(API);
+    const res = await apiFetch(API);
     const lista = await res.json();
     cuerpoTabla.innerHTML = '';
     lista.forEach(m => {
@@ -29,7 +29,7 @@ async function cargarManuales() {
 }
 
 async function cargarSelectRegistrador() {
-    const res = await fetch('/api/usuarios');
+    const res = await apiFetch('/api/usuarios');
     const usuarios = await res.json();
     selectRegistrador.innerHTML = '<option value="">Selecciona un usuario</option>';
     usuarios.forEach(u => {
@@ -58,7 +58,7 @@ form.addEventListener('submit', async (e) => {
         idRegistradoPor: selectRegistrador.value
     };
 
-    const res = await fetch(API, {
+    const res = await apiFetch(API, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(datos)
@@ -76,7 +76,7 @@ form.addEventListener('submit', async (e) => {
 cuerpoTabla.addEventListener('click', async (e) => {
     if (e.target.classList.contains('btn-ver-historial')) {
         const id = e.target.dataset.id;
-        const res = await fetch(`${API}/${id}/historial`);
+        const res = await apiFetch(`${API}/${id}/historial`);
         const historial = await res.json();
         const lista = document.getElementById('listaHistorial');
         lista.innerHTML = '';

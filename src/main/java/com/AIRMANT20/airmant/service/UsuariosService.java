@@ -1,5 +1,6 @@
 package com.AIRMANT20.airmant.service;
 
+import com.AIRMANT20.airmant.model.Rol;
 import com.AIRMANT20.airmant.model.Usuarios;
 import com.AIRMANT20.airmant.repository.UsuariosRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +24,11 @@ public class UsuariosService {
         return usuariosRepository.findById(id);
     }
 
-    public Usuarios crear(Usuarios usuario) {
-        return usuariosRepository.save(usuario);
+    public ResultadoOperacion<Usuarios> crear(Usuarios usuario) {
+        if (!Rol.esValido(usuario.getRol())) {
+            return ResultadoOperacion.error("Rol no válido: " + usuario.getRol());
+        }
+        return ResultadoOperacion.exito(usuariosRepository.save(usuario));
     }
 
     public ResultadoOperacion<Usuarios> login(String nombreUsuario, String password) {

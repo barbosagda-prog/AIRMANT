@@ -7,7 +7,7 @@ const modal = document.getElementById('modalForm');
 const form = document.getElementById('formAeronave');
 
 async function cargarAeronaves() {
-    const res = await fetch(API);
+    const res = await apiFetch(API);
     const lista = await res.json();
     cuerpoTabla.innerHTML = '';
     lista.forEach(a => {
@@ -69,7 +69,7 @@ form.addEventListener('submit', async (e) => {
     const url = id ? `${API}/${id}?idUsuario=${sessionStorage.getItem('idUsuario')}` : `${API}?idUsuario=${sessionStorage.getItem('idUsuario')}`;
     const metodo = id ? 'PUT' : 'POST';
 
-    await fetch(url, {
+    await apiFetch(url, {
         method: metodo,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(datos)
@@ -84,14 +84,14 @@ cuerpoTabla.addEventListener('click', async (e) => {
     if (!id) return;
 
     if (e.target.classList.contains('btn-editar')) {
-        const res = await fetch(`${API}/${id}`);
+        const res = await apiFetch(`${API}/${id}`);
         const aeronave = await res.json();
         abrirModal(aeronave);
     }
 
     if (e.target.classList.contains('btn-eliminar')) {
         if (confirm('¿Eliminar esta aeronave?')) {
-            await fetch(`${API}/${id}?idUsuario=${sessionStorage.getItem('idUsuario')}`, { method: 'DELETE' });
+            await apiFetch(`${API}/${id}?idUsuario=${sessionStorage.getItem('idUsuario')}`, { method: 'DELETE' });
             cargarAeronaves();
         }
     }

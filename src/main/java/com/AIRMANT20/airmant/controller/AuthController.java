@@ -2,6 +2,7 @@ package com.AIRMANT20.airmant.controller;
 
 import com.AIRMANT20.airmant.dto.LoginRequest;
 import com.AIRMANT20.airmant.model.Usuarios;
+import com.AIRMANT20.airmant.security.JwtService;
 import com.AIRMANT20.airmant.service.ResultadoOperacion;
 import com.AIRMANT20.airmant.service.UsuariosService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,9 @@ public class AuthController {
     @Autowired
     private UsuariosService usuariosService;
 
+    @Autowired
+    private JwtService jwtService;
+
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest req) {
         ResultadoOperacion<Usuarios> resultado = usuariosService.login(req.getNombreUsuario(), req.getPassword());
@@ -27,7 +31,7 @@ public class AuthController {
 
         Usuarios usuario = resultado.getDatos();
         return ResponseEntity.ok(Map.of(
-                "token", "sesion-" + usuario.getId_usuarios(),
+                "token", jwtService.generarToken(usuario),
                 "rol", usuario.getRol(),
                 "nombre", usuario.getNombres(),
                 "id", usuario.getId_usuarios()
